@@ -18,8 +18,8 @@ public class Carro {
     private String cor;
     private String fabricante;
     private boolean reservado;
+    private float preco; // Atributo para o preço diário
 
-    // Gerando UUID diretamente ao persistir
     @PrePersist
     public void prePersist() {
         if (id == null) {
@@ -82,5 +82,18 @@ public class Carro {
 
     public void setReservado(boolean reservado) {
         this.reservado = reservado;
+    }
+
+    public float getPreco() {
+        return preco;
+    }
+
+    public void setPreco(float preco) {
+        this.preco = preco;
+    }
+
+    // Retorna apenas o valor da diária
+    public float getDiaria() {
+        return preco;
     }
 }
