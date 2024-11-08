@@ -1,8 +1,7 @@
 package com.example.api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.util.UUID;
 
@@ -16,18 +15,24 @@ public class Carro {
     private String modelo;
     private int anoFabricacao;
     private String cor;
-    private String fabricante;
+
+
+    @ManyToOne
+    @JoinColumn(name = "marca_id", nullable = false)
+    private Marca marca;
+
     private boolean reservado;
     private float preco; // Atributo para o preço diário
 
     @PrePersist
     public void prePersist() {
         if (id == null) {
-            id = UUID.randomUUID(); // Gera um UUID aleatório
+            id = UUID.randomUUID();
         }
     }
 
-    // Getters e Setters
+    // Getters e Setters para os atributos
+
     public UUID getId() {
         return id;
     }
@@ -68,12 +73,12 @@ public class Carro {
         this.cor = cor;
     }
 
-    public String getFabricante() {
-        return fabricante;
+    public Marca getMarca() {
+        return marca;
     }
 
-    public void setFabricante(String fabricante) {
-        this.fabricante = fabricante;
+    public void setMarca(Marca marca) {
+        this.marca = marca;
     }
 
     public boolean isReservado() {
@@ -92,7 +97,6 @@ public class Carro {
         this.preco = preco;
     }
 
-    // Retorna apenas o valor da diária
     public float getDiaria() {
         return preco;
     }

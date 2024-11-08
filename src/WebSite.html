@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filllo - Aluguel de Carros de Luxo</title>
+    <style>
+        :root {
+            --primary-color: #1a1e2e;
+            --secondary-color: #2a2f42;
+            --accent-color: #3b82f6;
+            --text-color: #ffffff;
+            --text-secondary: #9ca3af;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        main {
+            padding: 2rem 0;
+        }
+        h1, h2 {
+            margin-bottom: 1rem;
+        }
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .search-form select, .search-form input, .search-form button {
+            padding: 0.5rem;
+            border: 1px solid var(--secondary-color);
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+        .search-form button {
+            background-color: var(--accent-color);
+            cursor: pointer;
+        }
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .car-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .car-card:hover {
+            transform: translateY(-5px);
+        }
+        .car-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .car-details {
+            padding: 1rem;
+        }
+        .car-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .car-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .car-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">Filllo</div>
+            <div class="nav-links">
+                <a href="#" aria-current="page">Home</a>
+                <a href="#">Carros</a>
+                <a href="#">Revendedores</a>
+                <a href="#">Mensagens</a>
+                <a href="#">Histórico</a>
+            </div>
+        </nav>
+    </div>
+</header>
+<main class="container">
+    <h1>Dirija o carro dos seus sonhos</h1>
+    <form class="search-form" id="search-form">
+        <select id="car-brand" aria-label="Marca do carro">
+            <option value="">Marca do carro</option>
+        </select>
+        <select id="car-model" aria-label="Modelo do carro">
+            <option value="">Modelo do carro</option>
+        </select>
+        <input type="text" id="pickup-location" placeholder="Local de retirada" aria-label="Local de retirada">
+        <input type="date" id="pickup-date" aria-label="Data de retirada">
+        <button type="submit">Buscar</button>
+    </form>
+    <h2>Carros Populares</h2>
+    <div class="car-grid" id="popular-cars"></div>
+    <h2>Nossa Coleção</h2>
+    <div class="car-grid" id="our-collection"></div>
+</main>
+<script>
+    // Simulação de uma API
+    const apiData = {
+        popularCars: [
+            { id: 1, brand: 'Porsche', model: '911', year: 2021, price: 950, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
+            { id: 2, brand: 'Nissan', model: 'GT-R', year: 2023, price: 1260, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
+            { id: 3, brand: 'Chevrolet', model: 'Corvette C8', year: 2022, price: 800, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' }
+        ],
+        ourCollection: [
+            { id: 4, brand: 'Porsche', model: '911 Carrera GTS', year: 2022, price: 150, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
+            { id: 5, brand: 'Porsche', model: 'Taycan', year: 2023, price: 950, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
+            { id: 6, brand: 'Porsche', model: 'Panamera 4.4s', year: 2022, price: 135, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
+            { id: 7, brand: 'Porsche', model: '718', year: 2023, price: 950, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' }
+        ]
+    };
+
+    // Função para simular uma chamada de API
+    function fetchData(endpoint) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(apiData[endpoint]);
+            }, 500);
+        });
+    }
+
+    // Função para criar um card de carro
+    function createCarCard(car) {
+        return `
+                <div class="car-card">
+                    <img src="${car.image}" alt="${car.brand} ${car.model}" class="car-image">
+                    <div class="car-details">
+                        <h3 class="car-title">${car.brand} ${car.model}</h3>
+                        <p class="car-subtitle">${car.year}</p>
+                        <p class="car-price">$${car.price}/dia</p>
+                    </div>
+                </div>
+            `;
+    }
+
+    // Função para preencher a seção de carros
+    async function populateCarSection(sectionId, endpoint) {
+        const section = document.getElementById(sectionId);
+        const cars = await fetchData(endpoint);
+        section.innerHTML = cars.map(createCarCard).join('');
+    }
+
+    // Inicializar a página
+    document.addEventListener('DOMContentLoaded', () => {
+        populateCarSection('popular-cars', 'popularCars');
+        populateCarSection('our-collection', 'ourCollection');
+    });
+
+    // Manipular o envio do formulário de busca
+    document.getElementById('search-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Funcionalidade de busca não implementada neste exemplo.');
+    });
+</script>
+</body>
+</html>

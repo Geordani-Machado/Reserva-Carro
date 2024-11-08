@@ -1,8 +1,6 @@
 package com.example.api.Controller;
-import com.example.api.model.Carro;
 import com.example.api.model.Marca;
 import com.example.api.repository.MarcaRepository;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

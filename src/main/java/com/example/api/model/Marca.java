@@ -1,10 +1,7 @@
 package com.example.api.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-
+import jakarta.persistence.*;
 import java.util.UUID;
+
 
 @Entity
 public class Marca {
@@ -14,11 +11,10 @@ public class Marca {
 
     private String nome;
 
-    // Gerando UUID diretamente ao persistir
     @PrePersist
     public void prePersist() {
         if (id == null) {
-            id = UUID.randomUUID(); // Gera um UUID aleatório
+            id = UUID.randomUUID();
         }
     }
 
