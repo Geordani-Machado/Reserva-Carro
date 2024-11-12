@@ -83,8 +83,7 @@
         }
         .car-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 600px;
         }
         .car-details {
             padding: 1rem;
@@ -113,13 +112,6 @@
     <div class="container">
         <nav>
             <div class="logo">Filllo</div>
-            <div class="nav-links">
-                <a href="#" aria-current="page">Home</a>
-                <a href="#">Carros</a>
-                <a href="#">Revendedores</a>
-                <a href="#">Mensagens</a>
-                <a href="#">Histórico</a>
-            </div>
         </nav>
     </div>
 </header>
@@ -129,71 +121,51 @@
         <select id="car-brand" aria-label="Marca do carro">
             <option value="">Marca do carro</option>
         </select>
-        <select id="car-model" aria-label="Modelo do carro">
-            <option value="">Modelo do carro</option>
-        </select>
         <input type="text" id="pickup-location" placeholder="Local de retirada" aria-label="Local de retirada">
         <input type="date" id="pickup-date" aria-label="Data de retirada">
         <button type="submit">Buscar</button>
     </form>
     <h2>Carros Populares</h2>
     <div class="car-grid" id="popular-cars"></div>
-    <h2>Nossa Coleção</h2>
-    <div class="car-grid" id="our-collection"></div>
 </main>
 <script>
-    // Simulação de uma API
-    const apiData = {
-        popularCars: [
-            { id: 1, brand: 'Porsche', model: '911', year: 2021, price: 950, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
-            { id: 2, brand: 'Nissan', model: 'GT-R', year: 2023, price: 1260, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
-            { id: 3, brand: 'Chevrolet', model: 'Corvette C8', year: 2022, price: 800, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' }
-        ],
-        ourCollection: [
-            { id: 4, brand: 'Porsche', model: '911 Carrera GTS', year: 2022, price: 150, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
-            { id: 5, brand: 'Porsche', model: 'Taycan', year: 2023, price: 950, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
-            { id: 6, brand: 'Porsche', model: 'Panamera 4.4s', year: 2022, price: 135, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' },
-            { id: 7, brand: 'Porsche', model: '718', year: 2023, price: 950, image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B30C57121-3628-44ED-8258-C158C3B0CF7C%7D-sTBDnEjm51yS1oYN3o6wWf69TovNck.png' }
-        ]
-    };
-
-    // Função para simular uma chamada de API
-    function fetchData(endpoint) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(apiData[endpoint]);
-            }, 500);
-        });
+    async function fetchCarData() {
+        try {
+            const response = await fetch("http://localhost:8080/carros");
+            if (!response.ok) {
+                throw new Error("Erro ao buscar dados da API");
+            }
+            const carData = await response.json();
+            return carData;
+        } catch (error) {
+            console.error("Erro ao buscar dados da API:", error);
+            return [];
+        }
     }
 
-    // Função para criar um card de carro
     function createCarCard(car) {
         return `
-                <div class="car-card">
-                    <img src="${car.image}" alt="${car.brand} ${car.model}" class="car-image">
-                    <div class="car-details">
-                        <h3 class="car-title">${car.brand} ${car.model}</h3>
-                        <p class="car-subtitle">${car.year}</p>
-                        <p class="car-price">$${car.price}/dia</p>
-                    </div>
+            <div class="car-card">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_646384-MLB74178251683_012024-O.webp" alt="${car.nome}" class="car-image">
+                <div class="car-details">
+                    <h3 class="car-title">${car.marca.nome} ${car.nome}</h3>
+                    <p class="car-subtitle">Modelo: ${car.modelo} - Ano: ${car.anoFabricacao}</p>
+                    <p class="car-price">R$${car.preco}/dia</p>
                 </div>
-            `;
+            </div>
+        `;
     }
 
-    // Função para preencher a seção de carros
-    async function populateCarSection(sectionId, endpoint) {
+    async function populateCarSection(sectionId) {
         const section = document.getElementById(sectionId);
-        const cars = await fetchData(endpoint);
+        const cars = await fetchCarData();
         section.innerHTML = cars.map(createCarCard).join('');
     }
 
-    // Inicializar a página
     document.addEventListener('DOMContentLoaded', () => {
-        populateCarSection('popular-cars', 'popularCars');
-        populateCarSection('our-collection', 'ourCollection');
+        populateCarSection('popular-cars');
     });
 
-    // Manipular o envio do formulário de busca
     document.getElementById('search-form').addEventListener('submit', (e) => {
         e.preventDefault();
         alert('Funcionalidade de busca não implementada neste exemplo.');
